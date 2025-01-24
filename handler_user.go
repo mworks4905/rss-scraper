@@ -29,8 +29,13 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		Name:      params.Name,
 	})
 	if err != nil {
-		responseWithError(w, 500, fmt.Sprintf("Error creating user: %v", err))
+		responseWithError(w, 400, fmt.Sprintf("Error creating user: %v", err))
+		return
 	}
 
+	responseWithJson(w, 201, DatabaseUsertoUser(user))
+}
+
+func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request, user database.User) {
 	responseWithJson(w, 200, DatabaseUsertoUser(user))
 }
