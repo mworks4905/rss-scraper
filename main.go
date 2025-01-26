@@ -42,7 +42,7 @@ func main() {
 		DB: db,
 	}
 
-	startScapping(db, 10, time.Minute)
+	go startScapping(db, 10, time.Minute)
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -66,6 +66,8 @@ func main() {
 	v1Router.Post("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerCreateFeedFollow))
 	v1Router.Get("/feed_follows", apiCfg.middlewareAuth(apiCfg.handlerGetFeedFollows))
 	v1Router.Delete("/feed_follows/{feedFollowId}", apiCfg.middlewareAuth(apiCfg.handlerDeleteFeedFollows))
+
+	v1Router.Get("/posts", apiCfg.middlewareAuth(apiCfg.handlerGetPostsForUser))
 
 	r.Mount("/v1", v1Router)
 
